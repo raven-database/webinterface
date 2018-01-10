@@ -57,10 +57,10 @@ $liblist = null;
 <?php
   echo '<form id="geneall" class="top-border" action="'.$phpscript.'" method="post">';
 ?>
-    <p class="pages"><span>Species: </span>
+    <p class="pages"><span>Species / Individual libraries: </span>
     <select name="species" id="species" required>
       <option value="" disabled >Select A Species or Individual libraries</option>
-      <option value="individual" selected <?php if ($_POST['species']=='individual') echo 'selected="selected"'; ?> >individual</option>
+      <option value="individual" selected <?php if ($_POST['species']=='individual') echo 'selected="selected"'; ?> >INDIVIDUAL libraries</option>
       <option value="gallus" selected <?php if ($_POST['species']=='gallus') echo 'selected="selected"'; ?> >gallus</option>
 			<option value="mus_musculus" <?php if ($_POST['species']=='mus_musculus') echo 'selected="selected"'; ?> >mus_musculus</option>
 			<option value="alligator_mississippiensis" <?php if ($_POST['species']=='alligator_mississippiensis') echo 'selected="selected"'; ?> >alligator_mississippiensis</option>
@@ -76,16 +76,15 @@ $liblist = null;
       ?>
       </p>
     </div> <!-- Individual div -->
-    </p>
     <p class="pages"><span>Expression Values: </span>
     <select name="expvalue" id="expvalue" required>
       <option value="fpkm" selected <?php if ($_POST['expvalue']=='fpkm') echo 'selected="selected"'; ?> >fpkm</option>
 			<option value="tpm" <?php if ($_POST['expvalue']=='tpm') echo 'selected="selected"'; ?> >tpm</option>
     </select>
     </p>
-    
+    <center><br>
     <input type="submit" name="geneinfo" value="View Genes" onclick="doit();"/>
-    <input type="submit" name="geneinfo" value="View Overlapping Genes" onclick="doit();"/><br>
+    <input type="submit" name="geneinfo" value="View Overlapping Genes" onclick="doit();"/></center><br>
 </form> </div>
 <hr>
 <?php

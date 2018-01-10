@@ -168,7 +168,7 @@
     />
     <span> in </span>
     <select name="column">
-      <option value="library_id">library_id</option>
+      <option value="libraryid">libraryid</option>
       <?php
         if (empty($_SESSION['column'])) {
           $_SESSION['libraryid'] = "libraryid";

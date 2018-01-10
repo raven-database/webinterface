@@ -122,7 +122,7 @@
         <option value="tooth">tooth</option>
         <option value="white_matter">white_matter</option>
       </select></p>
-		</div><br>
+		</div>
 		<p class="pages"><span>Expression details: </span>
     <select name="expression" id="expression" required>
       <option value="fpkm" selected <?php if ($_POST['expression']=='fpkm') echo 'selected="selected"'; ?> >fpkm</option>

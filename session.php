@@ -1,5 +1,7 @@
 <?php
    include('config.php');
+   session_start();
+   
    $_SESSION['LAST_ACTIVITY'] = time() ; //update last activity time stamp
    if ((time() - $_SESSION['LAST_ACTIVITY']) > 100) { session_unset(); session_destroy(); }
    $user_check = $_SESSION['login_user'];
