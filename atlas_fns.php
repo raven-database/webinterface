@@ -10,18 +10,18 @@ function meta_display($action, $result, $primary_key) {
   $num_rows = $result->num_rows;
   echo '<br><table class="metadata"><tr>';
   echo '<th align="left" width=40pt bgcolor="white"><font size="2" color="red">Select All</font><input type="checkbox" id="selectall" onClick="selectAll(this)" /></th>';
-  $meta = $result->fetch_field_direct(0); echo '<th class="metadata" id="' . $meta->name . '">' . libraryid . '</th>';
-  $meta = $result->fetch_field_direct(1); echo '<th class="metadata" id="' . $meta->name . '">' . birdid . '</th>';
-  $meta = $result->fetch_field_direct(2); echo '<th class="metadata" id="' . $meta->name . '">' . species . '</th>';
-  $meta = $result->fetch_field_direct(3); echo '<th class="metadata" id="' . $meta->name . '">' . line . '</th>';
-  $meta = $result->fetch_field_direct(4); echo '<th class="metadata" id="' . $meta->name . '">' . tissue . '</th>';
-  $meta = $result->fetch_field_direct(5); echo '<th class="metadata" id="' . $meta->name . '">' . method . '</th>';
-  $meta = $result->fetch_field_direct(6); echo '<th class="metadata" id="' . $meta->name . '">' . indexname . '</th>';
-  $meta = $result->fetch_field_direct(7); echo '<th class="metadata" id="' . $meta->name . '">' . chipresult . '</th>';
-  $meta = $result->fetch_field_direct(8); echo '<th class="metadata" id="' . $meta->name . '">' . scientist . '</th>';
-  $meta = $result->fetch_field_direct(9); echo '<th class="metadata" id="' . $meta->name . '">' . date . '</th>';
-  $meta = $result->fetch_field_direct(10); echo '<th class="metadata" id="' . $meta->name . '">' . notes . '</th>';
-  $meta = $result->fetch_field_direct(11); echo '<th class="metadata" id="' . $meta->name . '">' . status . '</th></tr>';
+  $meta = $result->fetch_field_direct(0); echo '<th class="metadata" id="' . $meta->name . '">Library ID</th>';
+  $meta = $result->fetch_field_direct(1); echo '<th class="metadata" id="' . $meta->name . '">Bird ID</th>';
+  $meta = $result->fetch_field_direct(2); echo '<th class="metadata" id="' . $meta->name . '">Species</th>';
+  $meta = $result->fetch_field_direct(3); echo '<th class="metadata" id="' . $meta->name . '">Line</th>';
+  $meta = $result->fetch_field_direct(4); echo '<th class="metadata" id="' . $meta->name . '">Tissue</th>';
+  $meta = $result->fetch_field_direct(5); echo '<th class="metadata" id="' . $meta->name . '">Method</th>';
+  $meta = $result->fetch_field_direct(6); echo '<th class="metadata" id="' . $meta->name . '">Date</th>';
+  $meta = $result->fetch_field_direct(7); echo '<th class="metadata" id="' . $meta->name . '">Sample Description</th>';
+  $meta = $result->fetch_field_direct(8); echo '<th class="metadata" id="' . $meta->name . '">Map Status</th></tr>';
+  $meta = $result->fetch_field_direct(9); echo '<th class="metadata" id="' . $meta->name . '">Gene Status</th></tr>';
+  $meta = $result->fetch_field_direct(10); echo '<th class="metadata" id="' . $meta->name . '">RawCount Status</th></tr>';
+  $meta = $result->fetch_field_direct(11); echo '<th class="metadata" id="' . $meta->name . '">Variant Status</th></tr>';
 
   for ($i = 0; $i < $num_rows; $i++) {
     if ($i % 2 == 0) {

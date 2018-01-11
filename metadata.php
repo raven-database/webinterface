@@ -15,7 +15,9 @@
 <?php
   /* Tables required from the database */
   $table = "BirdLibraries";
-  $statustable = "MappingStats";
+  $statustable = "TheMetadata";
+	$genestatus = "GenesSummary";
+	$variantstatus = "VariantSummary";
 ?>
 <?php
   $query = "SHOW KEYS FROM $table WHERE Key_name = 'PRIMARY'";
@@ -28,6 +30,7 @@
   if (!$primary_key) {
     echo "<div><strong>NO PRIMARY KEY!\nFUNCTIONS WILL NOT WORK AS EXPECTED!</strong></div>";
   }
+	$query = "select $table.libraryid, $table.birdid, $table.species, $table.line, $table.tissue, $table.method, $table.date, $table.notes, $statustable.status, $genestatus.genestatus, $genestatus.countstatus, $variantstatus.status from $table left outer join $statustable on $table.libraryid = $statustable.libraryid left outer join $genestatus on $genestatus.libraryid = $table.libraryid left outer join $variantstatus on $variantstatus.libraryid = $table.libraryid ";
 ?>
 <?php
   //create query for DB display
@@ -45,8 +48,7 @@
     $_SESSION['select'] = $terms;
     $_SESSION['column'] = "libraryid";
 
-    $query = "select $table.*,$statustable.status from $table left outer join $statustable on $table.libraryid = $statustable.libraryid ";
-    if ($is_term) {
+		if ($is_term) {
         $query .= "WHERE ";
     }
     foreach ($_SESSION['select'] as $term) {
@@ -80,18 +82,72 @@
     $_SESSION['select'] = $terms;
     $_SESSION['column'] = $_POST['column'];
     $_SESSION['status'] = $_POST['rnull'];
+		$_SESSION['gstatus'] = $_POST['gnull'];
+		$_SESSION['cstatus'] = $_POST['cnull'];
+		$_SESSION['vstatus'] = $_POST['vnull'];
 
-    $query = "select $table.*,$statustable.status from $table left outer join $statustable on $table.libraryid = $statustable.libraryid ";
-    if ($_SESSION['status'] == "true"){
-      $query .= " WHERE $statustable.status = ". '"done" ';
-      if ($is_term) {
-        $query .= "AND ";
-      }
-    }else {
-      if ($is_term) {
-        $query .= "WHERE ";
-      }
-    }
+    if ($_SESSION['gstatus'] == "true"){ #gene
+			$query .= " WHERE $genestatus.genestatus = ". '"done" ';
+			if ($_SESSION['cstatus'] == "true"){ #g-count
+				$query .= "AND $genestatus.countstatus = ". '"done" ';
+			}
+			if ($_SESSION['vstatus'] == "true"){ #g-variant
+				$query .= "AND $variantstatus.status = ". '"done" ';
+			}
+			if ($_SESSION['status'] == "true"){ #g-default
+				$query .= "AND $statustable.status = ". '"done" ';
+			}
+			if ($is_term) {
+				$query .= "AND ";
+			}
+		} elseif ($_SESSION['cstatus'] == "true"){ #count
+			$query .= " WHERE $genestatus.countstatus = ". '"done" ';
+			if ($_SESSION['gstatus'] == "true"){ #c-gene
+				$query .= "AND $genestatus.genestatus = ". '"done" ';
+			}
+			if ($_SESSION['vstatus'] == "true"){ #c-variant
+				$query .= "AND $variantstatus.status = ". '"done" ';
+			}
+			if ($_SESSION['status'] == "true"){ #c-default
+				$query .= "AND $statustable.status = ". '"done" ';
+			}
+			if ($is_term) {
+				$query .= "AND ";
+			}
+		} elseif ($_SESSION['vstatus'] == "true"){ #variant
+			$query .= " WHERE $variantstatus.status = ". '"done" ';
+			if ($_SESSION['cstatus'] == "true"){ #v-count
+				$query .= "AND $genestatus.countstatus = ". '"done" ';
+			}
+			if ($_SESSION['gstatus'] == "true"){ #v-gene
+				$query .= "AND $genestatus.genestatus = ". '"done" ';
+			}
+			if ($_SESSION['status'] == "true"){ #v-default
+				$query .= "AND $statustable.status = ". '"done" ';
+			}
+			if ($is_term) {
+				$query .= "AND ";
+			}
+		} elseif ($_SESSION['status'] == "true"){ #default
+			$query .= " WHERE $statustable.status = ". '"done" ';
+			if ($_SESSION['cstatus'] == "true"){ #d-count
+				$query .= "AND $genestatus.countstatus = ". '"done" ';
+			}
+			if ($_SESSION['gstatus'] == "true"){ #d-gene
+				$query .= "AND $genestatus.genestatus = ". '"done" ';
+			}
+			if ($_SESSION['vstatus'] == "true"){ #d-variant
+				$query .= "AND $variantstatus.status = ". '"done" ';
+			}
+			if ($is_term) {
+				$query .= "AND ";
+			}
+		} else {
+			if ($is_term) {
+				$query .= "WHERE ";
+			}
+		}
+
     foreach ($_SESSION['select'] as $term) {
       if (trim($term) == "") {
         continue;
@@ -113,8 +169,8 @@
         $is_term = true;
       }
     }
-    $query = "select $table.*,$statustable.status from $table left outer join $statustable on $table.libraryid = $statustable.libraryid ";
-    if ($_SESSION['status'] == "true"){
+    
+		if ($_SESSION['status'] == "true"){
       $query .= " WHERE $statustable.status = ". '"done" ';
       if ($is_term) {
         $query .= "AND ";
@@ -143,7 +199,7 @@
   $result = $db_conn->query($query);
   if ($db_conn->errno) {
     echo "<div>";
-    echo "<span><strong>Error with query.</strong></span>";
+    echo "<span><strong>Error with query.$query</strong></span>";
     echo "<span><strong>Error number: </strong>$db_conn->errno</span>";
     echo "<span><strong>Error string: </strong>$db_conn->error</span>";
     echo "</div>";
@@ -312,9 +368,11 @@
       ?> 
     </select>
     <span>records.</span></p><p class="pages">
-    <span>Check to view only processed libraries:</span>
-    <input type="checkbox" name="rnull" value="true"> 
-    <input type="submit" name="order" value="Go"/></p></div>
+    <span>View samples with mapping information:</span><input type="checkbox" name="rnull" value="true"><br>
+		<span>View samples with gene expression information:</span><input type="checkbox" name="gnull" value="true"><br>
+		<span>View samples with gene raw counts information:</span><input type="checkbox" name="cnull" value="true"><br>
+		<span>View samples with variant information:</span><input type="checkbox" name="vnull" value="true"> 
+    <br><center></venter><input type="submit" name="order" value="Go"/></p></div></center>
 </form></tr></table>
 <hr>
 <?php

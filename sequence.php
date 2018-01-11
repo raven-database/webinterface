@@ -16,6 +16,7 @@
   /* Tables required from the database */
   $statustable = "vw_libmetadata";
   $table = "MappingStats";
+	$themetadata = "TheMetadata";
 ?>
 <?php
   $query = "SHOW KEYS FROM $table WHERE Key_name = 'PRIMARY'";
@@ -48,9 +49,9 @@
     $query = "select $statustable.libraryid,$statustable.line,$statustable.species, $statustable.tissue,
               $table.totalreads, $statustable.mappedreads, $statustable.alignmentrate, $statustable.genes, 
               $statustable.totalVARIANTS VARIANTS,$statustable.totalSNPs SNPs, $statustable.totalINDELs INDELs,
-              Syntaxes.sequences Sequences, $table.date Date from $table join $statustable on
+              $themetadata.sequences Sequences, $table.date Date from $table join $statustable on
 							$table.libraryid = $statustable.libraryid join
-							Syntaxes on $table.libraryid = Syntaxes.libraryid ";
+							$themetadata on $table.libraryid = $themetadata.libraryid ";
     if ($is_term) {
         $query .= "WHERE ";
     }
@@ -83,9 +84,9 @@
     $query = "select $statustable.libraryid,$statustable.line,$statustable.species, $statustable.tissue,
               $table.totalreads, $statustable.mappedreads, $statustable.alignmentrate, $statustable.genes,
               $statustable.totalVARIANTS VARIANTS,$statustable.totalSNPs SNPs, $statustable.totalINDELs INDELs,
-              Syntaxes.sequences Sequences, $table.date Date from $table join $statustable on
-							$table.library_id = $statustable.libraryid join
-							Syntaxes on $table.libraryid = Syntaxes.libraryid ";
+              $themetadata.sequences Sequences, $table.date Date from $table join $statustable on
+							$table.libraryid = $statustable.libraryid join
+							$themetadata on $table.libraryid = $themetadata.libraryid ";
     if ($is_term) {
         $query .= "WHERE ";
     }
@@ -121,9 +122,9 @@
     $query = "select $statustable.library_id,$statustable.line,$statustable.species, $statustable.tissue,
               $table.totalreads, $statustable.mappedreads, $statustable.alignmentrate, $statustable.genes, 
               $statustable.totalVARIANTS VARIANTS,$statustable.totalSNPs SNPs, $statustable.totalINDELs INDELs,
-              Syntaxes.sequences Sequences, $table.date Date from $table join $statustable on
+              $themetadata.sequences Sequences, $table.date Date from $table join $statustable on
 							$table.libraryid = $statustable.libraryid join
-							Syntaxes on $table.libraryid = Syntaxes.libraryid ";
+							$themetadata on $table.libraryid = $themetadata.libraryid ";
     if ($is_term) {
         $query .= "WHERE ";
     }
@@ -174,9 +175,9 @@
     $query = "select $statustable.libraryid,$statustable.line,$statustable.species, $statustable.tissue,
               $table.totalreads, $statustable.mapped_reads, $statustable.genes, $statustable.isoforms,
               $statustable.totalVARIANTS VARIANTS,$statustable.totalSNPs SNPs, $statustable.totalINDELs INDELs,
-              Syntaxes.sequences Sequences, $table.date Date from $table join $statustable on
+              $themetadata.sequences Sequences, $table.date Date from $table join $statustable on
 							$table.libraryid = $statustable.libraryid join
-							Syntaxes on $table.libraryid = Syntaxes.libraryid ";
+							$themetadata on $table.libraryid = $themetadata.libraryid ";
     if ($is_term) {
         $query .= "WHERE ";
     }
